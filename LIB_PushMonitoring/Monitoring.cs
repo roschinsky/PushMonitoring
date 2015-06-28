@@ -151,7 +151,7 @@ namespace TRoschinsky.Lib.PushMonitoring
             {
                 if (monitoringConfig.LogFile != null)
                 {
-                    string notificationLog = OverrideRunNeeded() ? DateTime.Now.Ticks.ToString() : lastOverrideExecution.Ticks.ToString();
+                    string notificationLog = OverrideRunNeeded() || lastOverrideExecution == DateTime.MinValue ? DateTime.Now.Ticks.ToString() : lastOverrideExecution.Ticks.ToString();
                     notificationLog += String.Format("\n*** Results ***\n{0}", LastCheckResult);
                     File.WriteAllText(monitoringConfig.LogFile.FullName, notificationLog, Encoding.UTF8);
                 }
