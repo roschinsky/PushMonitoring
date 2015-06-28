@@ -17,7 +17,7 @@ namespace TRoschinsky.Lib.PushMonitoring.CheckTypes
             : base(url, fromStateCode, toStateCode, valueUnitToken) { }
 
         public CheckHttp(string url)
-            : base(url, valueUnitToken) { }
+            : base(url, 200, 226, valueUnitToken) { }
 
         public override void ExecuteCheck()
         {

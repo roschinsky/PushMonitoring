@@ -22,20 +22,29 @@ namespace TRoschinsky.Lib.PushMonitoring
         public Monitoring(string xmlConfigString)
         {
             monitoringConfig = new MonitoringConfig(xmlConfigString);
-            if (monitoringConfig != null && monitoringConfig.ConfigReadSuccessfully)
-            {
-                checks.AddRange(monitoringConfig.Checks);
-                RunChecks();
-            }
+            Initialize();
         }
 
         public Monitoring(FileInfo xmlConfig)
         {
             monitoringConfig = new MonitoringConfig(xmlConfig);
+            Initialize();
+        }
+
+        private void Initialize()
+        {
             if (monitoringConfig != null && monitoringConfig.ConfigReadSuccessfully)
             {
-                checks.AddRange(monitoringConfig.Checks);
-                RunChecks();
+                // Add checks from configuration if there are any
+                if (monitoringConfig.Checks != null && monitoringConfig.Checks.Length > 0)
+                {
+                    checks.AddRange(monitoringConfig.Checks);
+                    // Run checks if there are any
+                    if (checks.Count > 0)
+                    {
+                        RunChecks();
+                    }
+                }
             }
         }
 
@@ -111,6 +120,16 @@ namespace TRoschinsky.Lib.PushMonitoring
         public void AddCheck(Check check)
         {
             checks.Add(check);
+        }
+
+        private void ReadLogfile()
+        {
+
+        }
+
+        private void WriteLogfile()
+        {
+            string notificationLog = DateTime.Now.Ticks.ToString() + System.Environment.NewLine;
         }
     }
 }
