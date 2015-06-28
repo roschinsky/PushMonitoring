@@ -14,6 +14,7 @@ namespace TRoschinsky.Lib.PushMonitoring
     class MonitoringConfig
     {
         public string Name { get; private set; }
+        public FileInfo LogFile { get; private set; }
         public string IntervallType { get; private set; }
         public int Intervall { get; private set; }
         private List<Check> checks = new List<Check>();
@@ -56,7 +57,7 @@ namespace TRoschinsky.Lib.PushMonitoring
                                 switch (node.Name)
                                 {
                                     case "logFile":
-                                        FileInfo LogFile = new FileInfo(node.InnerText);
+                                        LogFile = new FileInfo(node.InnerText);
                                         break;
 
                                     case "sendWithoutError":

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace TRoschinsky.Lib.PushMonitoring
 {
@@ -11,7 +12,7 @@ namespace TRoschinsky.Lib.PushMonitoring
     public class Monitoring
     {
         private MonitoringConfig monitoringConfig;
-
+        private DateTime lastOverrideExecution = DateTime.MinValue;
         private List<Check> checks = new List<Check>();
         public IReadOnlyList<Check> Checks { get { return checks.AsReadOnly(); } }
         public int LastNotifcationsSuccessful { get; private set; }
@@ -42,7 +43,9 @@ namespace TRoschinsky.Lib.PushMonitoring
                     // Run checks if there are any
                     if (checks.Count > 0)
                     {
+                        ReadLogfile();
                         RunChecks();
+                        WriteLogfile();
                     }
                 }
             }
@@ -78,7 +81,7 @@ namespace TRoschinsky.Lib.PushMonitoring
                 }
 
                 // Processing of checks done so now let's see if we have to push out some notifications
-                if (sendNotification || monitoringConfig.NotifyEverRun)
+                if (sendNotification || OverrideRunNeeded() || monitoringConfig.NotifyEverRun)
                 {
                     LastNotifcationsSuccessful = SendNotification(notificationBody);
                 }
@@ -124,12 +127,69 @@ namespace TRoschinsky.Lib.PushMonitoring
 
         private void ReadLogfile()
         {
-
+            try
+            {
+                if (monitoringConfig.LogFile != null && monitoringConfig.LogFile.Exists)
+                {
+                    string[] lines = File.ReadAllLines(monitoringConfig.LogFile.FullName, Encoding.UTF8);
+                    if (lines != null && lines.Length > 0)
+                    {
+                        lastOverrideExecution = new DateTime(long.Parse(lines[0]));
+                        return;
+                    }
+                }
+            }
+            catch (Exception)
+            { 
+                // Something went wrong but we don't care; feature will be disabled
+            }
         }
 
         private void WriteLogfile()
         {
-            string notificationLog = DateTime.Now.Ticks.ToString() + System.Environment.NewLine;
+            try
+            {
+                if (monitoringConfig.LogFile != null)
+                {
+                    string notificationLog = OverrideRunNeeded() ? DateTime.Now.Ticks.ToString() : lastOverrideExecution.Ticks.ToString();
+                    notificationLog += String.Format("\n*** Results ***\n{0}", LastCheckResult);
+                    File.WriteAllText(monitoringConfig.LogFile.FullName, notificationLog, Encoding.UTF8);
+                }
+            }
+            catch (Exception)
+            {
+                // Something went wrong but we don't care; feature will be disabled by next read
+            }
+        }
+
+        private bool OverrideRunNeeded()
+        {
+            bool result = false;
+            if (!String.IsNullOrWhiteSpace(monitoringConfig.IntervallType) && monitoringConfig.Intervall > 0 && lastOverrideExecution > DateTime.MinValue)
+            {
+
+                TimeSpan lastOverrideExecutionSince = DateTime.Now - lastOverrideExecution;
+
+                switch (monitoringConfig.IntervallType.ToLower())
+                {
+                    case "day":
+                    case "days":
+                        result = lastOverrideExecutionSince.TotalDays > monitoringConfig.Intervall;
+                        break;
+                    case "hour":
+                    case "hours":
+                        result = lastOverrideExecutionSince.TotalHours > monitoringConfig.Intervall;
+                        break;
+                    case "minute":
+                    case "minutes":
+                        result = lastOverrideExecutionSince.TotalMinutes > monitoringConfig.Intervall;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            return result;
         }
     }
 }
