@@ -6,7 +6,7 @@ namespace TRoschinsky.Lib.PushMonitoring.CheckTypes
     public class CheckDisk : CheckByValue
     {
         private const string valueUnitToken = "%";
-        public bool CheckMultipleDrives { get { return this.Input != null && this.Input.GetType() == typeof(string) && !String.IsNullOrWhiteSpace((string)this.Input); } }
+        public bool CheckSpecificDrive { get { return this.Input != null && this.Input.GetType() == typeof(string) && !String.IsNullOrWhiteSpace((string)this.Input); } }
 
 
         public CheckDisk(object driveLetter, double minPercentageFree, double maxPercentageFree)
@@ -29,28 +29,42 @@ namespace TRoschinsky.Lib.PushMonitoring.CheckTypes
             DriveInfo[] drives = DriveInfo.GetDrives();
             foreach(DriveInfo drive in drives)
             {
-                if (drive.IsReady)
+                try
                 {
-                    string volumeLabel = String.IsNullOrWhiteSpace(drive.VolumeLabel) ? String.Empty : String.Format(" ({0})", drive.VolumeLabel);
-
-                    if (CheckMultipleDrives)
+                    if (drive.IsReady)
                     {
-                        if (drive.Name == (string)Input)
+                        string volumeLabel = String.IsNullOrWhiteSpace(drive.VolumeLabel) ? String.Empty : String.Format(" ({0})", drive.VolumeLabel);
+
+                        if (CheckSpecificDrive)
                         {
-                            freeSpace = drive.AvailableFreeSpace;
-                            totalSpace = drive.TotalSize;
-                            Output = String.Format("has {0} of {1} free space{2}.",
-                                CheckDisk.BytesToString(drive.TotalFreeSpace), CheckDisk.BytesToString(drive.TotalSize), volumeLabel);
-                            break;
+                            if (drive.Name == (string)Input)
+                            {
+                                freeSpace = drive.AvailableFreeSpace;
+                                totalSpace = drive.TotalSize;
+                                Output = String.Format("has {0} of {1} free space{2}.",
+                                    CheckDisk.BytesToString(drive.TotalFreeSpace), CheckDisk.BytesToString(drive.TotalSize), volumeLabel);
+                                break;
+                            }
                         }
+                        else
+                        {
+                            freeSpace += drive.AvailableFreeSpace;
+                            totalSpace += drive.TotalSize;
+                            Output += String.Format("\n\t- {0} has {1} of {2} free space{3}.",
+                                drive.Name, CheckDisk.BytesToString(drive.TotalFreeSpace), CheckDisk.BytesToString(drive.TotalSize), volumeLabel);
+                        }
+                    }
+                }
+                catch(Exception ex)
+                {
+                    if(CheckSpecificDrive)
+                    {
+                        Output = String.Format("failed due to {0}", ex.Message);
                     }
                     else
                     {
-                        freeSpace += drive.AvailableFreeSpace;
-                        totalSpace += drive.TotalSize;
-                        Output += String.Format("\n\t- {0} has {1} of {2} free space{3}.",
-                            drive.Name, CheckDisk.BytesToString(drive.TotalFreeSpace), CheckDisk.BytesToString(drive.TotalSize), volumeLabel);
-                    }
+                        Output += String.Format("\n\t- failed due to {0}", ex.Message);
+                    }                    
                 }
             }
 
@@ -60,7 +74,7 @@ namespace TRoschinsky.Lib.PushMonitoring.CheckTypes
 
         protected override string GetName()
         {
-            if (CheckMultipleDrives)
+            if (CheckSpecificDrive)
             {
                 return String.Format("DRIVE {0}", this.Input);
             }
@@ -69,6 +83,8 @@ namespace TRoschinsky.Lib.PushMonitoring.CheckTypes
                 return String.Format("DRIVES");
             }
         }
+
+        #region Helper
 
         private static String BytesToString(long byteCount)
         {
@@ -89,5 +105,7 @@ namespace TRoschinsky.Lib.PushMonitoring.CheckTypes
                 return "<N/A>";
             }
         }
+
+        #endregion
     }
 }

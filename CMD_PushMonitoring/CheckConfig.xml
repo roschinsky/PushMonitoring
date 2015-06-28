@@ -3,13 +3,17 @@
   <logFile>.\PushMonitoring.log</logFile>
   <sendWithoutError IntervallType="Hours" Intervall="12" />
   <sendInterfaces>
+    <!--
     <sendTo Type="Pushalot" ApiKey="4c246115ca8848a8a87d63b0f9885a96" />
+    -->
     <sendTo Type="Pushover" ApiKey="nay" />
     <sendTo Type="Pushalot" ApiKey="nay" />
   </sendInterfaces>
   <checksToRun>
     <CheckDisk Drive="C" MinPercentageFree="45" MaxPercentageFree="90" />
     <CheckDisk Drive="D:" MinPercentageFree="45" MaxPercentageFree="90" />
-    <CheckHttp Url="http://halnet.selfip.org/" StateCodeFrom="200" StateCodeTo="200" />
+    <CheckHttp Url="http://halnet.selfip.org/" StateCodeFrom="200" StateCodeTo="226" />
+    <CheckHttp Url="http://heise.de/" StateCodeFrom="200" StateCodeTo="226" />
+    <CheckHttp Url="https://mxr.halnet.selfip.org/owa" StateCodeFrom="200" StateCodeTo="226" />
   </checksToRun>
 </configPushMonitoring>

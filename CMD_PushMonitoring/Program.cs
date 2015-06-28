@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TRoschinsky.Lib.PushMonitoring;
 
@@ -17,9 +18,9 @@ namespace TRoschinsky.App.PushMonitoring
 
             try
             {
-                Console.WriteLine(" *** {0} ({1}) ***", GetAssemblyAttribute<AssemblyTitleAttribute>(a => a.Title).Replace("CMD_", String.Empty), GetAssemblyAttribute<AssemblyCopyrightAttribute>(a => a.Copyright));
-                Console.WriteLine(" {0}\n", GetAssemblyAttribute<AssemblyDescriptionAttribute>(a => a.Description));
+                WriteIntro();
 
+                // Extract arguments and setup PushMonitoring instance
                 if(args != null && args.Length == 1)
                 {
                     configFile = new FileInfo(args[0]);
@@ -52,15 +53,28 @@ namespace TRoschinsky.App.PushMonitoring
             {
                 Console.WriteLine("...an unexpected error occurred: {0}", ex.Message);
             }
+            Console.WriteLine(Environment.NewLine);
             
 #if DEBUG
             Console.ReadKey();
 #endif
         }
 
+        private static void WriteIntro()
+        {
+            Console.WriteLine(" *** {0} ({1}) ***", GetAssemblyAttribute<AssemblyTitleAttribute>(a => a.Title).Replace("CMD_", String.Empty), GetAssemblyAttribute<AssemblyCopyrightAttribute>(a => a.Copyright));
+            string description = GetAssemblyAttribute<AssemblyDescriptionAttribute>(a => a.Description);
+            foreach (string line in new List<string>(Regex.Split(description, @"(?<=\G.{71})", RegexOptions.Singleline)))
+            {
+                Console.WriteLine(" {0}", line);
+            }
+            Console.WriteLine(Environment.NewLine);
+        }
+
         private static void Exceute(FileInfo configFile)
         {
             Monitoring monitor = new Monitoring(configFile);
+            Console.WriteLine(Environment.NewLine);
             Console.WriteLine(monitor.LastCheckResult);
         }
 
