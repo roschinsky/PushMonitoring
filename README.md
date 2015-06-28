@@ -1,9 +1,9 @@
 # PushMonitoring
 A library and command line tool for sending notifications via push services about windows system states.
 
-Push notifications are little alerts comming right to your phone, mobile client or desktop. They are fairly easy to send and wont spam your mailbox. So why not using them for a plain and simple notification service that reminds you of health issues of your IT environment? Sure you might say "What for? I use nagios or MOM and redirect mails to eMail API of my push provider!" but what if you don't want to install and maintain a management infrastructure for your computers at home or a single server running mostly silently at home in the boxroom? 
+Push notifications are little alerts comming right to your phone, mobile client or desktop. They are fairly easy to send and won't spam your mailbox. So why not using them for a plain and simple notification service that reminds you of health issues of your IT environment? Sure you might say "What for? I use Nagios or MOM and redirect mails to eMail API of my push provider!" but what if you don't want to install and maintain a management infrastructure for your computers at home or a single server running mostly silently at home in the boxroom? 
 
-That's exactly what PushMonitoring is meant for. Just create a scheduled task, fill in a XML file for configuration and you're ready to go! With one execution of _CMD_PushMonitoring_ you can run multiple checks at once and trigger one or more push provider. With scheduled task you can easily let it run every time your client starts up or every hour - checks are executed and just if some of the defined checks are not resulting within the values you expect it'll give you a buzz. PushMonitoring supports Pushalot and Pushover services.
+That's exactly what PushMonitoring is meant for. Just create a scheduled task, fill in a XML file for configuration and you're ready to go! With one execution of _CMD_PushMonitoring_ you're able to execute multiple checks at once and trigger one or more push provider. With scheduled task you can easily let it run every time your client starts up or every hour - checks are executed and just if some of the defined checks are not resulting within the values you expect it'll give you a buzz. PushMonitoring supports Pushalot and Pushover services.
 
 ## Contents
 
