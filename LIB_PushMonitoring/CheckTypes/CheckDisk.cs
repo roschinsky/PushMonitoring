@@ -13,13 +13,13 @@ namespace TRoschinsky.Lib.PushMonitoring.CheckTypes
             : base(driveLetter, minPercentageFree, maxPercentageFree, valueUnitToken) { }
 
         public CheckDisk(object driveLetter)
-            : base(driveLetter, valueUnitToken) { }
+            : base(driveLetter, 5, 100, valueUnitToken) { }
 
         public CheckDisk(double minPercentageFree, double maxPercentageFree)
             : base(null, minPercentageFree, maxPercentageFree, valueUnitToken) { }
 
         public CheckDisk()
-            : base(null, valueUnitToken) { }
+            : base(null, 5, 100, valueUnitToken) { }
 
         public override void ExecuteCheck()
         {

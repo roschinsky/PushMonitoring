@@ -27,7 +27,7 @@ namespace TRoschinsky.Lib.PushMonitoring.CheckTypes
             {
                 if (input == null || String.IsNullOrWhiteSpace((string)input))
                 {
-                    Output = "no valid Uri given";
+                    Output = "no valid URL given";
                     CurrentValue = 0;
                     return;
                 }
@@ -82,11 +82,11 @@ namespace TRoschinsky.Lib.PushMonitoring.CheckTypes
         {
             if(input != null && !String.IsNullOrWhiteSpace((string)input))
             {
-                return (string)input;
+                return String.Format("GET {0}", (string)input);
             }
             else
             {
-                return "Uri unknown";
+                return "URL unknown";
             }
         }
     }

@@ -83,7 +83,9 @@ namespace TRoschinsky.Lib.PushMonitoring
                 // Processing of checks done so now let's see if we have to push out some notifications
                 if (sendNotification || OverrideRunNeeded() || monitoringConfig.NotifyEverRun)
                 {
+#if RELEASE
                     LastNotifcationsSuccessful = SendNotification(notificationBody);
+#endif
                 }
 
                 // Set last result

@@ -10,9 +10,10 @@
     <sendTo Type="Pushalot" ApiKey="nay" />
   </sendInterfaces>
   <checksToRun>
-    <CheckDisk Drive="C" MinPercentageFree="25" MaxPercentageFree="90" />
+    <CheckDisk Drive="C:" MinPercentageFree="25" MaxPercentageFree="90" />
     <CheckDisk Drive="D:" MinPercentageFree="25" MaxPercentageFree="90" />
     <CheckHttp Url="http://halnet.selfip.org/" StateCodeFrom="200" StateCodeTo="203" />
-    <CheckHttp Url="http://heise.de/" />
+    <CheckIcmp Host="hmc.halnet.selfip.org"  />
+    <CheckIcmp Host="80.86.5.9"  />
   </checksToRun>
 </configPushMonitoring>

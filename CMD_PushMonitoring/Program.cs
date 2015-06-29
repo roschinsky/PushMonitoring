@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using TRoschinsky.Lib.PushMonitoring;
 
 namespace TRoschinsky.App.PushMonitoring
@@ -14,14 +11,22 @@ namespace TRoschinsky.App.PushMonitoring
     {
         static void Main(string[] args)
         {
+            WriteIntro();
+            Initialize(args);
+            
+#if DEBUG
+            Console.ReadKey();
+#endif
+        }
+
+        private static void Initialize(string[] args)
+        {
             FileInfo configFile;
 
             try
             {
-                WriteIntro();
-
                 // Extract arguments and setup PushMonitoring instance
-                if(args != null && args.Length == 1)
+                if (args != null && args.Length == 1)
                 {
                     configFile = new FileInfo(args[0]);
                     if (configFile != null && configFile.Exists)
@@ -46,27 +51,12 @@ namespace TRoschinsky.App.PushMonitoring
                     {
                         Console.WriteLine(" ...could not find/access default config file \"{0}\"", configFile.Name);
                     }
-                }                
+                }
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine("...an unexpected error occurred: {0}", ex.Message);
-            }
-            Console.WriteLine(Environment.NewLine);
-            
-#if DEBUG
-            Console.ReadKey();
-#endif
-        }
-
-        private static void WriteIntro()
-        {
-            Console.WriteLine(" *** {0} ({1}) ***", GetAssemblyAttribute<AssemblyTitleAttribute>(a => a.Title).Replace("CMD_", String.Empty), GetAssemblyAttribute<AssemblyCopyrightAttribute>(a => a.Copyright));
-            string description = GetAssemblyAttribute<AssemblyDescriptionAttribute>(a => a.Description);
-            foreach (string line in new List<string>(Regex.Split(description, @"(?<=\G.{71})", RegexOptions.Singleline)))
-            {
-                Console.WriteLine(" {0}", line);
             }
             Console.WriteLine(Environment.NewLine);
         }
@@ -79,6 +69,17 @@ namespace TRoschinsky.App.PushMonitoring
         }
 
         #region Helper
+
+        private static void WriteIntro()
+        {
+            Console.WriteLine(" *** {0} ({1}) ***", GetAssemblyAttribute<AssemblyTitleAttribute>(a => a.Title).Replace("CMD_", String.Empty), GetAssemblyAttribute<AssemblyCopyrightAttribute>(a => a.Copyright));
+            string description = GetAssemblyAttribute<AssemblyDescriptionAttribute>(a => a.Description);
+            foreach (string line in new List<string>(Regex.Split(description, @"(?<=\G.{71})", RegexOptions.Singleline)))
+            {
+                Console.WriteLine(" {0}", line);
+            }
+            Console.WriteLine(Environment.NewLine);
+        }
 
         private static string GetAssemblyAttribute<T>(Func<T, string> value)
             where T : Attribute

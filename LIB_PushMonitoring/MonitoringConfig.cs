@@ -111,24 +111,58 @@ namespace TRoschinsky.Lib.PushMonitoring
                             switch (checkNode.Name)
                             {
                                 case "CheckDisk":
-                                    input = checkNode.Attributes["Drive"] != null ? checkNode.Attributes["Drive"].Value : null;
-                                    if (!input.Contains(":")) { input += ":"; }
-                                    if (!input.Contains("\\")) { input += "\\"; }
-                                    minValue = checkNode.Attributes["MinPercentageFree"] != null ? double.Parse(checkNode.Attributes["MinPercentageFree"].Value) : double.MinValue;
-                                    maxValue = checkNode.Attributes["MaxPercentageFree"] != null ? double.Parse(checkNode.Attributes["MaxPercentageFree"].Value) : double.MaxValue;
-                                    checks.Add(new CheckDisk(input, minValue, maxValue));
+                                    if (checkNode.Attributes["Drive"] != null)
+                                    {
+                                        string drive = checkNode.Attributes["Drive"] != null ? checkNode.Attributes["Drive"].Value : null;
+                                        if (!drive.Contains(":")) { drive += ":"; }
+                                        if (!drive.Contains("\\")) { drive += "\\"; }
+
+                                        if(checkNode.Attributes["MinPercentageFree"] != null && checkNode.Attributes["MaxPercentageFree"] != null)
+                                        {
+                                            checks.Add(new CheckDisk(drive, double.Parse(checkNode.Attributes["MinPercentageFree"].Value), double.Parse(checkNode.Attributes["MaxPercentageFree"].Value)));
+                                        }
+                                        else
+                                        {
+                                            checks.Add(new CheckDisk(drive));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (checkNode.Attributes["MinPercentageFree"] != null && checkNode.Attributes["MaxPercentageFree"] != null)
+                                        {
+                                            checks.Add(new CheckDisk(double.Parse(checkNode.Attributes["MinPercentageFree"].Value), double.Parse(checkNode.Attributes["MaxPercentageFree"].Value)));
+                                        }
+                                        else
+                                        {
+                                            checks.Add(new CheckDisk());
+                                        }
+                                    }
                                     break;
                                 case "CheckHttp":
                                     input = checkNode.Attributes["Url"].Value;
-                                    minValue = checkNode.Attributes["StateCodeFrom"] != null ? double.Parse(checkNode.Attributes["StateCodeFrom"].Value) : double.MinValue;
-                                    maxValue = checkNode.Attributes["StateCodeTo"] != null ? double.Parse(checkNode.Attributes["StateCodeTo"].Value) : double.MaxValue;
-                                    checks.Add(new CheckHttp(input, minValue, maxValue));
+                                    if(checkNode.Attributes["StateCodeFrom"] != null && checkNode.Attributes["StateCodeTo"] != null)
+                                    {
+                                        checks.Add(new CheckHttp(input, double.Parse(checkNode.Attributes["StateCodeFrom"].Value), double.Parse(checkNode.Attributes["StateCodeTo"].Value)));
+                                    }
+                                    else
+                                    {
+                                        checks.Add(new CheckHttp(input));
+                                    }
                                     break;
                                 case "CheckIcmp":
-                                    // TODO: Implement setup of CheckIcmp config
+                                    input = checkNode.Attributes["Host"].Value;
+                                    if(checkNode.Attributes["MinResponseTimeMs"] != null && checkNode.Attributes["MaxResponseTimeMs"] != null)
+                                    {
+                                        checks.Add(new CheckIcmp(input, double.Parse(checkNode.Attributes["MinResponseTimeMs"].Value), double.Parse(checkNode.Attributes["MaxResponseTimeMs"].Value)));
+                                    }
+                                    else
+                                    {
+                                        checks.Add(new CheckIcmp(input));
+                                    }
                                     break;
                                 case "CheckWinService":
-                                    // TODO: Implement setup of CheckWinService config
+                                    input = checkNode.Attributes["ServiceName"].Value;
+                                    checks.Add(new CheckWinService(input));
                                     break;
                                 case "CheckWinUptime":
                                     // TODO: Implement setup of CheckWinUptime config
