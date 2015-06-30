@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- A monitoring configuration...
+  'Name' is included with the title of the notification
+  'NotifyEverRun' sets wether we should only report in case of errors or everytime -->
+<configPushMonitoring Name="SERVER #1" NotifyEverRun="false">
+  <!-- Just a place to store the logfile -->
+  <logFile>.\PushMonitoring.log</logFile>
+  <!-- Indicates your wish to get notified every X minutes, hours or days without an error -->
+  <sendWithoutError IntervallType="Day" Intervall="7" />
+  <!-- Here you will place all your notification endpoints; as 'Type' you'll use Pushalot and Pushover -->
+  <sendInterfaces>
+    <sendTo Type="Pushalot" ApiKey="4c246115ca8848a8a87d63b0f9885a96" />
+    <sendTo Type="Pushover" ApiKey="IamAnotherPushApiKey" />
+  </sendInterfaces>
+  <!-- All checks put in right here; samples should be self-explaining -->
+  <checksToRun>
+    <CheckDisk Drive="C:" MinPercentageFree="25" MaxPercentageFree="90" />
+    <CheckDisk Drive="D:" MinPercentageFree="25" MaxPercentageFree="90" />
+    <CheckHttp Url="http://halnet.selfip.org/" StateCodeFrom="200" StateCodeTo="203" />
+    <CheckIcmp Host="hmc.halnet.local"  />
+    <CheckIcmp Host="10.0.27.22"  />
+  </checksToRun>
+</configPushMonitoring>
