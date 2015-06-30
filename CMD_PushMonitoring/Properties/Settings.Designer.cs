@@ -25,7 +25,7 @@ namespace TRoschinsky.App.PushMonitoring.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(".\\CheckConfig.xml")]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\CheckConfigSample.xml")]
         public string ConfigFileDefaultPath {
             get {
                 return ((string)(this["ConfigFileDefaultPath"]));

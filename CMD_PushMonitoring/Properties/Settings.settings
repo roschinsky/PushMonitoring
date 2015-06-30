@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ConfigFileDefaultPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">.\CheckConfig.xml</Value>
+      <Value Profile="(Default)">.\CheckConfigSample.xml</Value>
     </Setting>
   </Settings>
 </SettingsFile>

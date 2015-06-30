@@ -58,27 +58,34 @@ namespace TRoschinsky.App.PushMonitoring
             {
                 Console.WriteLine("...an unexpected error occurred: {0}", ex.Message);
             }
-            Console.WriteLine(Environment.NewLine);
         }
 
         private static void Exceute(FileInfo configFile)
         {
             Monitoring monitor = new Monitoring(configFile);
-            Console.WriteLine(Environment.NewLine);
-            Console.WriteLine(monitor.LastCheckResult);
+            if (monitor.Checks.Count > 0)
+            {
+                Console.WriteLine(" ...{0}", monitor.LastCheckResult);
+            }
+            else
+            {
+                Console.WriteLine(" ...there are no checks defined. Please examine configuration at <checksToRun>!");
+            }
         }
 
         #region Helper
 
         private static void WriteIntro()
         {
+            Console.WriteLine();
             Console.WriteLine(" *** {0} ({1}) ***", GetAssemblyAttribute<AssemblyTitleAttribute>(a => a.Title).Replace("CMD_", String.Empty), GetAssemblyAttribute<AssemblyCopyrightAttribute>(a => a.Copyright));
+            Console.WriteLine(" -------------------------------------------------------------------------");
             string description = GetAssemblyAttribute<AssemblyDescriptionAttribute>(a => a.Description);
-            foreach (string line in new List<string>(Regex.Split(description, @"(?<=\G.{71})", RegexOptions.Singleline)))
+            foreach (string line in new List<string>(Regex.Split(description, @"(?<=\G.{74})", RegexOptions.Singleline)))
             {
                 Console.WriteLine(" {0}", line);
             }
-            Console.WriteLine(Environment.NewLine);
+            Console.WriteLine();
         }
 
         private static string GetAssemblyAttribute<T>(Func<T, string> value)

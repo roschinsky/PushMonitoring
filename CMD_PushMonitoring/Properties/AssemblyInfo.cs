@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
 [assembly: AssemblyTitle("CMD_PushMonitoring")]
-[assembly: AssemblyDescription("A simple command line tool for sending notifications via push services about windows system states.")]
+[assembly: AssemblyDescription("A simple command line utility for sending decentralized system monitoring notifications via push services.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Thomas Roschinsky")]
 [assembly: AssemblyProduct("PushMonitoring")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern 
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.1.*")]
-[assembly: AssemblyFileVersion("0.1.0.1")]
+[assembly: AssemblyVersion("0.2.*")]
+[assembly: AssemblyFileVersion("0.2.0.1")]
