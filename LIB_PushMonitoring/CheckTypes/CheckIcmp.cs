@@ -72,7 +72,5 @@ namespace TRoschinsky.Lib.PushMonitoring.CheckTypes
                 return "host unknown";
             }
         }
-
-
     }
 }

@@ -18,6 +18,8 @@ namespace TRoschinsky.Lib.PushMonitoring
         public int LastNotifcationsSuccessful { get; private set; }
         public int LastNotifcationsToSend { get { return monitoringConfig != null ? monitoringConfig.PushInterfaces.Count : 0; } }
         public string LastCheckResult { get; private set; }
+        public int LastChecksSuccessful { get; private set; }
+        public int LastChecksFailed { get; private set; }
 
 
         public Monitoring(string xmlConfigString)
@@ -53,11 +55,14 @@ namespace TRoschinsky.Lib.PushMonitoring
 
         public void RunChecks()
         {
+            LastChecksSuccessful = LastChecksFailed = 0;
+            LastCheckResult = String.Empty;
+
             try
             {
                 bool sendNotification = false;
                 string checkName = String.Empty;
-                string notificationBody = String.Format("Executed checks on '{0}' @ {1}\n", System.Environment.MachineName, DateTime.Now);
+                string notificationBody = String.Format("executed checks{2} on '{0}' @ {1}\n", System.Environment.MachineName, DateTime.Now, OverrideRunNeeded() ? " by interval" : String.Empty);
 
                 // Processing of checks by executing them and obtaining results
                 foreach (Check check in checks)
@@ -69,6 +74,11 @@ namespace TRoschinsky.Lib.PushMonitoring
                         if (check.NotifyRequired)
                         {
                             sendNotification = true;
+                            LastChecksFailed++;
+                        }
+                        else
+                        {
+                            LastChecksSuccessful++;
                         }
 
                         notificationBody += "\n" + check.ToString();
@@ -76,9 +86,12 @@ namespace TRoschinsky.Lib.PushMonitoring
                     catch (Exception ex)
                     {
                         sendNotification = true;
+                        LastChecksFailed++;
                         notificationBody += String.Format("\nCheck {0} failed with: {1}", checkName, ex.Message);
                     }
                 }
+
+                notificationBody += String.Format("\n\n Checks done. {2} (S:{0}/F:{1})", LastChecksSuccessful, LastChecksFailed, !sendNotification ? "It's all fine!" : "Some issues detected!");
 
                 // Processing of checks done so now let's see if we have to push out some notifications
                 if (sendNotification || OverrideRunNeeded() || monitoringConfig.NotifyEverRun)

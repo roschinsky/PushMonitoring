@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,6 +45,7 @@
     <Compile Include="CheckTypes\CheckDisk.cs" />
     <Compile Include="CheckTypes\CheckHttp.cs" />
     <Compile Include="CheckTypes\CheckIcmp.cs" />
+    <Compile Include="CheckTypes\CheckWinTask.cs" />
     <Compile Include="CheckTypes\CheckWinUptime.cs" />
     <Compile Include="CheckTypes\CheckWinService.cs" />
     <Compile Include="Monitoring.cs" />

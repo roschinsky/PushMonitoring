@@ -22,7 +22,14 @@ namespace TRoschinsky.Lib.PushMonitoring
 
         public override string ToString()
         {
-            return String.Format("Check '{0}' was {1}.", Name, (NotifyRequired ? "not successful" : "okay"));
+            if (String.IsNullOrWhiteSpace(Output))
+            {
+                return String.Format("Check '{0}' was {1}.", Name, (NotifyRequired ? "not successful" : "okay"));
+            }
+            else
+            {
+                return String.Format("Check '{0}' was {1}: {2}", Name, (NotifyRequired ? "not successful" : "okay"), Output);
+            }
         }
     }
 }

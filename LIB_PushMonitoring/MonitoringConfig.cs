@@ -105,8 +105,6 @@ namespace TRoschinsky.Lib.PushMonitoring
                         if (checkNode.Name.StartsWith("Check"))
                         {
                             string input = null;
-                            double minValue = 0;
-                            double maxValue = 0;
 
                             switch (checkNode.Name)
                             {
