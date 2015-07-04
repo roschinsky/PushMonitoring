@@ -87,7 +87,7 @@ namespace TRoschinsky.Lib.PushMonitoring
                     {
                         sendNotification = true;
                         LastChecksFailed++;
-                        notificationBody += String.Format("\nCheck {0} failed with: {1}", checkName, ex.Message);
+                        notificationBody += String.Format("\n[!] Check {0} failed with {1}", checkName, ex.Message);
                     }
                 }
 
@@ -97,7 +97,7 @@ namespace TRoschinsky.Lib.PushMonitoring
                 if (sendNotification || OverrideRunNeeded() || monitoringConfig.NotifyEverRun)
                 {
 #if RELEASE
-                    LastNotifcationsSuccessful = SendNotification(notificationBody);
+                    LastNotifcationsSuccessful = SendNotification(notificationBody, (LastChecksFailed > 0));
 #endif
                 }
 
@@ -110,7 +110,7 @@ namespace TRoschinsky.Lib.PushMonitoring
             }
         }
 
-        public int SendNotification(string notificationBody)
+        public int SendNotification(string notificationBody, bool sendWithHighPrio)
         {
             int successfulNotifications = 0;
             string monitoringName = String.Format("PM from {0}", monitoringConfig.Name);
@@ -121,12 +121,12 @@ namespace TRoschinsky.Lib.PushMonitoring
                 {
                     if (pushInterface.Value == typeof(NotificationPushover))
                     {
-                        Notification notify = new NotificationPushover(pushInterface.Key, notificationBody, monitoringName);
+                        Notification notify = new NotificationPushover(pushInterface.Key, notificationBody, monitoringName, sendWithHighPrio, false);
                         if(notify.NotificationSuccessfulSend) { successfulNotifications++; }
                     }
                     else if (pushInterface.Value == typeof(NotificationPushalot))
                     {
-                        Notification notify = new NotificationPushalot(pushInterface.Key, notificationBody, monitoringName);
+                        Notification notify = new NotificationPushalot(pushInterface.Key, notificationBody, monitoringName, sendWithHighPrio, false);
                         if (notify.NotificationSuccessfulSend) { successfulNotifications++; }
                     }
                 }
