@@ -16,7 +16,8 @@ namespace TRoschinsky.Lib.PushMonitoring
         }
         protected object input;
         public object Input { get { return input; } }
-        public string Output { get; protected set; }
+        public string output;
+        public virtual string Output { get { return output; } set { output = value; } }
 
         public DateTime LastCheck { get; protected set; }
         public virtual bool NotifyRequired { get; protected set; }
@@ -29,7 +30,8 @@ namespace TRoschinsky.Lib.PushMonitoring
 
         public virtual void ExecuteCheck()
         {
-            throw new NotImplementedException("No ExecuteCheck method implemented in abstract Check class; please use specific Check type class!");
+            LastCheck = DateTime.Now;
+            throw new NotImplementedException("No ExecuteCheck method implemented in abstract Check class; please use specific check type class!");
         }
 
         protected virtual string GetName()
@@ -41,11 +43,18 @@ namespace TRoschinsky.Lib.PushMonitoring
         {
             if (LastCheck != null && LastCheck > DateTime.Now.AddHours(-1))
             {
-                return String.Format("Check '{0}' is {1}.", Name, (NotifyRequired ? "out of valid range" : "within expceted scope"));
+                if (String.IsNullOrWhiteSpace(output))
+                {
+                    return String.Format("[{0}] Check '{1}' {2}.", (NotifyRequired ? "N" : "Y"), Name, (NotifyRequired ? "failed" : "was okay"));
+                }
+                else
+                {
+                    return String.Format("[{0}] Check '{1}' {2} with {3}.", (NotifyRequired ? "N" : "Y"), Name, (NotifyRequired ? "failed" : "was okay"), Output);
+                }
             }
             else
             {
-                return String.Format("Check '{0}' was not executed recently", Name);
+                return String.Format("[?] Check '{0}' was not executed recently.", Name);
             }
         }
     }

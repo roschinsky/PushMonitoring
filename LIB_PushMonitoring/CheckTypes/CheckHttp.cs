@@ -54,7 +54,7 @@ namespace TRoschinsky.Lib.PushMonitoring.CheckTypes
                 {
                     NotificationWebResponse = reader.ReadToEnd();
                 }
-                Output = String.Format("request failed in {0:N0}ms: {1}", requestTimer.ElapsedMilliseconds, exWeb.Message);
+                Output = String.Format("request issue in {0:N0}ms: {1}", requestTimer.ElapsedMilliseconds, exWeb.Message);
                 CurrentValue = (double)exWeb.Status;
             }
             catch (Exception ex)
@@ -63,7 +63,7 @@ namespace TRoschinsky.Lib.PushMonitoring.CheckTypes
                 {
                     requestTimer.Stop();
                 }
-                Output = String.Format("failed in {0:N0}ms: {1}", requestTimer.ElapsedMilliseconds, ex.Message);
+                Output = String.Format("issue in {0:N0}ms: {1}", requestTimer.ElapsedMilliseconds, ex.Message);
                 CurrentValue = 0;
             }
             

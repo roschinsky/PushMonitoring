@@ -17,6 +17,7 @@ namespace TRoschinsky.Lib.PushMonitoring
         public double CurrentValue { get { return currentValue; } protected set { currentValue = value; } }
         protected string valueUnit = String.Empty;
         public string ValueUnit { get { return valueUnit; } }
+        public override string Output { get { return String.IsNullOrWhiteSpace(output) ? String.Format("{0}{1}", CurrentValue, ValueUnit) : output; } }
 
         public override bool NotifyRequired { get { return (MinValue > double.MinValue && CurrentValue < MinValue) || (MaxValue < double.MaxValue && CurrentValue > MaxValue); } }
 
@@ -33,22 +34,6 @@ namespace TRoschinsky.Lib.PushMonitoring
             : base(input)
         {
             this.valueUnit = valueUnit;
-        }
-        
-        public override string ToString()
-        {
-            if (LastCheck != null && LastCheck > DateTime.Now.AddHours(-1))
-            {
-                if (String.IsNullOrWhiteSpace(Output))
-                {
-                    Output = String.Format("{0}{1}", CurrentValue, ValueUnit);
-                }
-                return String.Format("Check '{0}' {1} with {2}", Name, (NotifyRequired ? "is out of valid range" : "within expceted scope"), Output);
-            }
-            else
-            {
-                return String.Format("Check '{0}' was not executed recently", Name);
-            }
         }
     }
 }

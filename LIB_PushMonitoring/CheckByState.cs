@@ -19,17 +19,5 @@ namespace TRoschinsky.Lib.PushMonitoring
         {
             this.input = input;
         }
-
-        public override string ToString()
-        {
-            if (String.IsNullOrWhiteSpace(Output))
-            {
-                return String.Format("Check '{0}' was {1}.", Name, (NotifyRequired ? "not successful" : "okay"));
-            }
-            else
-            {
-                return String.Format("Check '{0}' was {1}: {2}", Name, (NotifyRequired ? "not successful" : "okay"), Output);
-            }
-        }
     }
 }

@@ -41,7 +41,7 @@ namespace TRoschinsky.Lib.PushMonitoring.CheckTypes
                             {
                                 freeSpace = drive.AvailableFreeSpace;
                                 totalSpace = drive.TotalSize;
-                                Output = String.Format("has {0} of {1} free space{2}.",
+                                Output = String.Format("{0} of {1} free space{2}.",
                                     CheckDisk.BytesToString(drive.TotalFreeSpace), CheckDisk.BytesToString(drive.TotalSize), volumeLabel);
                                 break;
                             }
