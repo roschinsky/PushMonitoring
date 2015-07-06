@@ -7,13 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIB_PushMonitoring", "LIB_P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMD_PushMonitoring", "CMD_PushMonitoring\CMD_PushMonitoring.csproj", "{8BA44AB5-E15F-4374-9C80-9D5A8BFA993F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".assets", ".assets", "{42A82888-C1E8-4A49-9410-974F4E403C13}"
-	ProjectSection(SolutionItems) = preProject
-		C:\Users\tommy\Pictures\Blog TRoschinsky\PushNotification_Config.jpg = C:\Users\tommy\Pictures\Blog TRoschinsky\PushNotification_Config.jpg
-		C:\Users\tommy\Pictures\Blog TRoschinsky\PushNotification_Execution.jpg = C:\Users\tommy\Pictures\Blog TRoschinsky\PushNotification_Execution.jpg
-		C:\Users\tommy\Pictures\Blog TRoschinsky\PushNotification_MessageReceived.jpg = C:\Users\tommy\Pictures\Blog TRoschinsky\PushNotification_MessageReceived.jpg
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
