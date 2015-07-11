@@ -7,21 +7,44 @@ using TRoschinsky.Lib.PushMonitoring;
 
 namespace TRoschinsky.App.PushMonitoring
 {
+    /// <summary>
+    /// The class Program is a simple command line wrapper, calling the check and notification 
+    /// logic provided by TRoschinsky.Lib.PushMonitoring.Monitoring library. It can optionally 
+    /// handle a specified configuration file from a command line parameter.
+    /// </summary>
     class Program
     {
+        /// <summary>
+        /// Main entrance when program is started; writes headline and short description to output, runs
+        /// initialization-method to execute logic and stops in DEBUG mode until key was pressed.
+        /// </summary>
+        /// <param name="args">Multiple strings passed from command line to the application</param>
         static void Main(string[] args)
         {
-            WriteIntro();
-            Initialize(args);
+            try
+            {
+                WriteIntro();
+                Execute(Initialize(args));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(" ...an unexpected error occurred: {0}\n", ex.Message);
+            }
             
 #if DEBUG
+            Console.WriteLine("\n < press any key to continue >");
             Console.ReadKey();
 #endif
         }
 
-        private static void Initialize(string[] args)
+        /// <summary>
+        /// Initialization by checking command line parameter if one was entered, obtaining path 
+        /// to config file and testing for existance of file.
+        /// </summary>
+        /// <param name="args">Multiple strings passed from command line to the application</param>
+        private static FileInfo Initialize(string[] args)
         {
-            FileInfo configFile;
+            FileInfo configFile = null;
 
             try
             {
@@ -32,7 +55,6 @@ namespace TRoschinsky.App.PushMonitoring
                     if (configFile != null && configFile.Exists)
                     {
                         Console.WriteLine(" ...using config file given \"{0}\"", configFile.Name);
-                        Exceute(configFile);
                     }
                     else
                     {
@@ -45,7 +67,6 @@ namespace TRoschinsky.App.PushMonitoring
                     if (configFile != null && configFile.Exists)
                     {
                         Console.WriteLine(" ...using default config file \"{0}\"", configFile.Name);
-                        Exceute(configFile);
                     }
                     else
                     {
@@ -56,20 +77,25 @@ namespace TRoschinsky.App.PushMonitoring
             }
             catch (Exception ex)
             {
-                Console.WriteLine("...an unexpected error occurred: {0}", ex.Message);
+                Console.WriteLine(" ...an unexpected error occurred: {0}", ex.Message);
             }
+
+            return configFile;
         }
 
-        private static void Exceute(FileInfo configFile)
+        private static void Execute(FileInfo configFile)
         {
-            Monitoring monitor = new Monitoring(configFile);
-            if (monitor.Checks.Count > 0)
+            if (configFile != null)
             {
-                Console.WriteLine(" ...{0}", monitor.LastCheckResult);
-            }
-            else
-            {
-                Console.WriteLine(" ...there are no checks defined. Please examine configuration at <checksToRun>!");
+                Monitoring monitor = new Monitoring(configFile);
+                if (monitor.Checks.Count > 0)
+                {
+                    Console.WriteLine(" ...{0}", monitor.LastCheckResult);
+                }
+                else
+                {
+                    Console.WriteLine(" ...there are no checks defined. Please examine configuration at <checksToRun>!");
+                }
             }
         }
 
