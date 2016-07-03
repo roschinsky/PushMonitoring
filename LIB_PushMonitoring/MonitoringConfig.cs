@@ -201,6 +201,10 @@ namespace TRoschinsky.Lib.PushMonitoring
                         {
                             pushInterfaces.Add(interfaceNode.Attributes["ApiKey"].Value, typeof(NotificationPushover));
                         }
+                        else if (interfaceNode.Attributes["Type"].Value == "Telegram")
+                        {
+                            pushInterfaces.Add(interfaceNode.Attributes["ApiKey"].Value, typeof(NotificationTelegram));
+                        }
                     }
                 }
             }

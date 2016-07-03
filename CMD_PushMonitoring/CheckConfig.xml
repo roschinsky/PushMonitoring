@@ -4,10 +4,12 @@
   <sendWithoutError IntervallType="Minute" Intervall="1" />
   <sendInterfaces>
     <!-- -->
+    <sendTo Type="Telegram" ApiKey="@roschinsky" />
+    <!--
     <sendTo Type="Pushalot" ApiKey="4c246115ca8848a8a87d63b0f9885a96" />
-    <!-- -->
     <sendTo Type="Pushover" ApiKey="nay" />
     <sendTo Type="Pushalot" ApiKey="nay" />
+     -->
   </sendInterfaces>
   <checksToRun>
     <CheckDisk Drive="C:" MinPercentageFree="25" MaxPercentageFree="90" />

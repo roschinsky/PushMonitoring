@@ -11,7 +11,7 @@ namespace TRoschinsky.Lib.PushMonitoring
         protected const string source = "PushMonitoring";
 
         protected string apiUrl;
-        protected string apiKey;
+        protected string rcpt;
         protected string message;
         protected string title;
         protected bool isImportant;
@@ -20,18 +20,18 @@ namespace TRoschinsky.Lib.PushMonitoring
         public string NotificationWebResponse = String.Empty;
 
 
-        public Notification(string apiKey, string message, string title, bool isImportant, bool isSilent)
+        public Notification(string rcptTo, string message, string title, bool isImportant, bool isSilent)
         {
-            this.apiKey = apiKey;
+            this.rcpt = rcptTo;
             this.message = message;
             this.title = title;
             this.isImportant = isImportant;
             this.isSilent = isSilent;
         }
 
-        public Notification(string apiKey, string message, string title)
+        public Notification(string rcptTo, string message, string title)
         {
-            this.apiKey = apiKey;
+            this.rcpt = rcptTo;
             this.message = message;
             this.title = title;
             this.isImportant = false;

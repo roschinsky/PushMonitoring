@@ -52,6 +52,7 @@
     <Compile Include="MonitoringConfig.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationPushalot.cs" />
+    <Compile Include="NotificationTelegram.cs" />
     <Compile Include="NotificationPushover.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CheckByValue.cs" />

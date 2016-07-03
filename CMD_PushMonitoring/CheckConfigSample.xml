@@ -12,6 +12,7 @@
   <sendInterfaces>
     <sendTo Type="Pushalot" ApiKey="HereYouHaveToEnterYourPaApiKey" />
     <sendTo Type="Pushover" ApiKey="HereYouHaveToEnterYourPoUserKey" />
+    <sendTo Type="Telegram" ApiKey="HereYouHaveToEnterYourTgChatId" />
   </sendInterfaces>
   <!-- All checks put in right here; samples should be self-explaining -->
   <checksToRun>

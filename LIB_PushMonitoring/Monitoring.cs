@@ -96,9 +96,9 @@ namespace TRoschinsky.Lib.PushMonitoring
                 // Processing of checks done so now let's see if we have to push out some notifications
                 if (sendNotification || OverrideRunNeeded() || monitoringConfig.NotifyEverRun)
                 {
-#if RELEASE
+//#if RELEASE
                     LastNotifcationsSuccessful = SendNotification(notificationBody, (LastChecksFailed > 0));
-#endif
+//#endif
                 }
 
                 // Set last result
@@ -127,6 +127,11 @@ namespace TRoschinsky.Lib.PushMonitoring
                     else if (pushInterface.Value == typeof(NotificationPushalot))
                     {
                         Notification notify = new NotificationPushalot(pushInterface.Key, notificationBody, monitoringName, sendWithHighPrio, false);
+                        if (notify.NotificationSuccessfulSend) { successfulNotifications++; }
+                    }
+                    else if (pushInterface.Value == typeof(NotificationTelegram))
+                    {
+                        Notification notify = new NotificationTelegram(pushInterface.Key, notificationBody, monitoringName, sendWithHighPrio, false);
                         if (notify.NotificationSuccessfulSend) { successfulNotifications++; }
                     }
                 }
