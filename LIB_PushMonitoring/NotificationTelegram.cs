@@ -7,11 +7,13 @@ namespace TRoschinsky.Lib.PushMonitoring
 {
     /// <summary>
     /// The class NotificationTelegram is a specific implementation for 
-    /// sending messages via bot by of a service called Pushover; see website 
+    /// sending messages via a Telegram messenger bot; see website 
     /// of provider for more information: https://core.telegram.org/bots/api
     /// </summary>
     public class NotificationTelegram : Notification
     {
+        // The bot I use here is https://telegram.me/PushMonBot; feel free to create your 
+        // own telegram bot and change the bot key here
         private const string botKey = "269024855:AAHSpgytxGAtnz3s_gJbqHjnXxO0tYGArv8";
 
         public NotificationTelegram(string chatId, string message, string title)
@@ -44,7 +46,7 @@ namespace TRoschinsky.Lib.PushMonitoring
                 {
                     NameValueCollection payload = new NameValueCollection();
                     payload["chat_id"] = rcpt;
-                    payload["title"] = String.Format("*{0}*\n{1}", 
+                    payload["text"] = String.Format("*{0}*\n{1}", 
                         title.Length > 250 ? title.Substring(0, 250) : title, 
                         message.Length > 1024 ? message.Substring(0, 1024) : message);
                     payload["parse_mode"] = "Markdown";
@@ -53,7 +55,7 @@ namespace TRoschinsky.Lib.PushMonitoring
                         payload["disable_notification"] = isSilent.ToString().ToUpper();
                     }
 
-                    byte[] response = client.UploadValues(apiUrl, payload);
+                    byte[] response = client.UploadValues(apiUrl, "POST", payload);
                     using (StreamReader reader = new StreamReader(new MemoryStream(response)))
                     {
                         NotificationWebResponse = reader.ReadToEnd();
