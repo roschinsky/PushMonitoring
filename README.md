@@ -9,7 +9,7 @@ That's exactly what PushMonitoring is meant for. Just create a scheduled task, f
 
 ![PushMonitoring received in mobile client](https://troschinsky.files.wordpress.com/2015/06/pushnotification_messagereceived1.jpg?w=630)
 
-PushMonitoring supports Pushalot and Pushover services.
+PushMonitoring supports Pushalot, Pushover and Telegram services.
 
 ## Contents
 
