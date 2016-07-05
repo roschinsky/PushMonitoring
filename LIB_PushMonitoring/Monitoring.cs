@@ -91,7 +91,7 @@ namespace TRoschinsky.Lib.PushMonitoring
                     }
                 }
 
-                notificationBody += String.Format("\n\n Checks done. {2} (S:{0}/F:{1})", LastChecksSuccessful, LastChecksFailed, !sendNotification ? "It's all fine!" : "Some issues detected!");
+                notificationBody += String.Format("\n\nChecks done. {2} (S:{0}/F:{1})", LastChecksSuccessful, LastChecksFailed, !sendNotification ? "It's all fine!" : "Some issues detected!");
 
                 // Processing of checks done so now let's see if we have to push out some notifications
                 if (sendNotification || OverrideRunNeeded() || monitoringConfig.NotifyEverRun)
