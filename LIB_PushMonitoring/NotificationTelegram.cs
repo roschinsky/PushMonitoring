@@ -18,6 +18,8 @@ namespace TRoschinsky.Lib.PushMonitoring
         private const string botKey = "269024855:AAHSpgytxGAtnz3s_gJbqHjnXxO0tYGArv8";
 
         // Emojis
+        private string icoAppSymbol = Encoding.UTF8.GetString(new byte[] { 0xF0, 0x9F, 0x92, 0xBB }); //\u1F4BB
+        private string icoNotifySilent = Encoding.UTF8.GetString(new byte[] { 0xF0, 0x9F, 0x94, 0x95 }); //\u1F515
         private string icoNotifyNormal = Encoding.UTF8.GetString(new byte[] { 0xF0, 0x9F, 0x94, 0x94 }); //\u1F514
         private string icoNotifyImportant = Encoding.UTF8.GetString(new byte[] { 0xF0, 0x9F, 0x93, 0xA2 }); //\u1F4E2
         private string icoCheck = Encoding.UTF8.GetString(new byte[] { 0xE2, 0x9C, 0x94 }); //\u2714
@@ -92,7 +94,7 @@ namespace TRoschinsky.Lib.PushMonitoring
             string result = String.Empty;
             try
             {
-                string headline = String.Format("{1} *{0}*\n", title, (isImportant ? icoNotifyImportant : icoNotifyNormal));
+                string headline = String.Format("{0}{1} *{2}*\n", icoAppSymbol, (isImportant ? icoNotifyImportant : (isSilent ? icoNotifySilent : icoNotifyNormal)), title);
                 result += headline;
 
                 int endOfFirstLine = message.IndexOf("\n");
