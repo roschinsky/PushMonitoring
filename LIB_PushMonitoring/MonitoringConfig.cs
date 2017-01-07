@@ -165,6 +165,47 @@ namespace TRoschinsky.Lib.PushMonitoring
                                 case "CheckWinUptime":
                                     // TODO: Implement setup of CheckWinUptime config
                                     break;
+                                case "CheckWinTaks":
+                                    // TODO: Implement setup of CheckWinTask config
+                                    break;
+                                case "CheckFileState":
+                                    input = checkNode.Attributes["FilePath"].Value;
+                                    checks.Add(new CheckFileState(input));
+                                    break;
+                                case "CheckFileContent":
+                                    input = checkNode.Attributes["FilePath"].Value;
+                                    string inputPeekFrom = checkNode.Attributes["PeekFrom"].Value;
+                                    string inputPeekTo = checkNode.Attributes["PeekTo"].Value;
+                                    CheckByProperties.Comparison inputCompareType;
+                                    switch(checkNode.Attributes["CompareType"].Value.ToLower())
+                                    {
+                                        case "hash":
+                                            inputCompareType = CheckByProperties.Comparison.Hash;
+                                            break;
+
+                                        case "startswith":
+                                            inputCompareType = CheckByProperties.Comparison.StartsWith;
+                                            break;
+
+                                        case "endswith":
+                                            inputCompareType = CheckByProperties.Comparison.EndsWith;
+                                            break;
+
+                                        case "contains":
+                                            inputCompareType = CheckByProperties.Comparison.Contains;
+                                            break;
+
+                                        case "length":
+                                            inputCompareType = CheckByProperties.Comparison.Length;
+                                            break;
+
+                                        default:
+                                            inputCompareType = CheckByProperties.Comparison.CompleteMatch;
+                                            break;
+                                    }
+                                    string inputExpectedValue = checkNode.Attributes["ExpectedValue"].Value;
+                                    checks.Add(new CheckFileContent(input, int.Parse(inputPeekFrom), int.Parse(inputPeekTo), inputCompareType, inputExpectedValue));
+                                    break;
 
                                 default:
                                     break;
