@@ -13,9 +13,12 @@
   </sendInterfaces>
   <checksToRun>
     <CheckDisk Drive="C:" MinPercentageFree="25" MaxPercentageFree="90" />
-    <CheckDisk Drive="D:" MinPercentageFree="25" MaxPercentageFree="90" />
+    <CheckDisk Drive="D:" MinPercentageFree="15" MaxPercentageFree="90" />
     <CheckHttp Url="http://halnet.selfip.org/" StateCodeFrom="200" StateCodeTo="203" />
     <CheckIcmp Host="hmc.halnet.selfip.org"  />
     <CheckIcmp Host="80.86.5.9"  />
+    <CheckFileState FilePath="T:\Data Temp\DownloadBuild2015Videoandslides.ps1" />
+    <CheckFileState FilePath="T:\Data Temp\DownloadBuild2015Videoandslides.ps2" />
+    <CheckFileState FilePath="T:\Data Temp\What\Is\That\Folder\For\noFile.txt" />
   </checksToRun>
 </configPushMonitoring>

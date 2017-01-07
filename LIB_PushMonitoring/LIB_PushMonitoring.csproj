@@ -42,10 +42,13 @@
   <ItemGroup>
     <Compile Include="Check.cs" />
     <Compile Include="CheckByState.cs" />
+    <Compile Include="CheckByProperties.cs" />
     <Compile Include="CheckTypes\CheckDisk.cs" />
     <Compile Include="CheckTypes\CheckHttp.cs" />
     <Compile Include="CheckTypes\CheckIcmp.cs" />
+    <Compile Include="CheckTypes\CheckFileState.cs" />
     <Compile Include="CheckTypes\CheckWinTask.cs" />
+    <Compile Include="CheckTypes\CheckFileContent.cs" />
     <Compile Include="CheckTypes\CheckWinUptime.cs" />
     <Compile Include="CheckTypes\CheckWinService.cs" />
     <Compile Include="Monitoring.cs" />
