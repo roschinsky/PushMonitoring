@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using TRoschinsky.Common;
 
 namespace TRoschinsky.Lib.PushMonitoring
 {
@@ -15,6 +16,8 @@ namespace TRoschinsky.Lib.PushMonitoring
         private DateTime lastOverrideExecution = DateTime.MinValue;
         private List<Check> checks = new List<Check>();
         public IReadOnlyList<Check> Checks { get { return checks.AsReadOnly(); } }
+        private List<JournalEntry> logEntries = new List<JournalEntry>();
+        public IReadOnlyList<JournalEntry> LogEntries { get { return logEntries.AsReadOnly(); } }
         public int LastNotifcationsSuccessful { get; private set; }
         public int LastNotifcationsToSend { get { return monitoringConfig != null ? monitoringConfig.PushInterfaces.Count : 0; } }
         public string LastCheckResult { get; private set; }
@@ -24,13 +27,17 @@ namespace TRoschinsky.Lib.PushMonitoring
 
         public Monitoring(string xmlConfigString)
         {
+            logEntries.Add(new JournalEntry("Starting with XML config string."));
             monitoringConfig = new MonitoringConfig(xmlConfigString);
+            logEntries.AddRange(monitoringConfig.Log);
             Initialize();
         }
 
         public Monitoring(FileInfo xmlConfig)
         {
+            logEntries.Add(new JournalEntry("Starting with XML config file."));
             monitoringConfig = new MonitoringConfig(xmlConfig);
+            logEntries.AddRange(monitoringConfig.Log);
             Initialize();
         }
 
@@ -104,9 +111,9 @@ namespace TRoschinsky.Lib.PushMonitoring
                 // Set last result
                 LastCheckResult = notificationBody;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Todo: Implement error handling
+                logEntries.Add(new JournalEntry("Unexpected error when running checks.", ex));
             }
         }
 
@@ -119,21 +126,29 @@ namespace TRoschinsky.Lib.PushMonitoring
             {
                 foreach (KeyValuePair<string, Type> pushInterface in monitoringConfig.PushInterfaces)
                 {
+                    Notification notify = null;
+                    logEntries.Add(new JournalEntry(String.Format("Notification via {0}...", pushInterface.Value.Name)));
                     if (pushInterface.Value == typeof(NotificationPushover))
                     {
-                        Notification notify = new NotificationPushover(pushInterface.Key, notificationBody, monitoringName, sendWithHighPrio, false);
+                        notify = new NotificationPushover(pushInterface.Key, notificationBody, monitoringName, sendWithHighPrio, false);
                         if(notify.NotificationSuccessfulSend) { successfulNotifications++; }
                     }
                     else if (pushInterface.Value == typeof(NotificationPushalot))
                     {
-                        Notification notify = new NotificationPushalot(pushInterface.Key, notificationBody, monitoringName, sendWithHighPrio, false);
+                        notify = new NotificationPushalot(pushInterface.Key, notificationBody, monitoringName, sendWithHighPrio, false);
                         if (notify.NotificationSuccessfulSend) { successfulNotifications++; }
                     }
                     else if (pushInterface.Value == typeof(NotificationTelegram))
                     {
-                        Notification notify = new NotificationTelegram(pushInterface.Key, notificationBody, monitoringName, sendWithHighPrio, false);
+                        notify = new NotificationTelegram(pushInterface.Key, notificationBody, monitoringName, sendWithHighPrio, false);
                         if (notify.NotificationSuccessfulSend) { successfulNotifications++; }
                     }
+
+                    if (notify != null)
+                    {
+                        logEntries.AddRange(notify.Log);
+                    }
+                    logEntries.Add(new JournalEntry(String.Format("...was processed!"), !(notify != null && notify.NotificationSuccessfulSend)));
                 }
             }
 
@@ -159,9 +174,10 @@ namespace TRoschinsky.Lib.PushMonitoring
                     }
                 }
             }
-            catch (Exception)
-            { 
+            catch (Exception ex)
+            {
                 // Something went wrong but we don't care; feature will be disabled
+                logEntries.Add(new JournalEntry("Unable to read log file.", ex));
             }
         }
 
@@ -176,9 +192,10 @@ namespace TRoschinsky.Lib.PushMonitoring
                     File.WriteAllText(monitoringConfig.LogFile.FullName, notificationLog, Encoding.UTF8);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Something went wrong but we don't care; feature will be disabled by next read
+                logEntries.Add(new JournalEntry("Unable to write log file.", ex));
             }
         }
 

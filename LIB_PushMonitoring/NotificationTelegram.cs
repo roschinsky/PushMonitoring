@@ -82,14 +82,15 @@ namespace TRoschinsky.Lib.PushMonitoring
             }
             catch (WebException exWeb)
             {
+                Log.Add(new Common.JournalEntry(String.Format("Failed to send message to API with HTTP state '{0}'.", exWeb.Status), this.GetType().Name, exWeb));
                 using (StreamReader reader = new StreamReader(exWeb.Response.GetResponseStream()))
                 {
                     NotificationWebResponse = reader.ReadToEnd();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Implement error handling
+                Log.Add(new Common.JournalEntry(String.Format("Failed to send message to '{0}'.", rcpt), this.GetType().Name, ex));
             }
             return false;
         }
@@ -118,9 +119,9 @@ namespace TRoschinsky.Lib.PushMonitoring
                 lastLine = lastLine.Replace("[R]", lastLine.Contains("issues detected") ? icoThumbDown : icoThumbUp);
                 result += lastLine;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Implement error handling
+                Log.Add(new Common.JournalEntry("Unable to format message.", this.GetType().Name, ex));
             }
 
             return result;

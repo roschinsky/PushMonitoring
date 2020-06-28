@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using TRoschinsky.Common;
 using TRoschinsky.Lib.PushMonitoring.CheckTypes;
 
 namespace TRoschinsky.Lib.PushMonitoring
@@ -22,6 +23,7 @@ namespace TRoschinsky.Lib.PushMonitoring
         public Dictionary<string, Type> pushInterfaces = new Dictionary<string, Type>();
         public Dictionary<string, Type> PushInterfaces { get { return pushInterfaces; } }
         public bool NotifyEverRun { get; private set; }
+        public List<JournalEntry> Log = new List<JournalEntry>();
 
         public bool ConfigReadSuccessfully { get; private set; }
 
@@ -41,7 +43,6 @@ namespace TRoschinsky.Lib.PushMonitoring
         {
             try
             {
-                // TODO: Implement parser
                 if(xmlConfig != null && xmlConfig.HasChildNodes)
                 {
                     XmlNode xmlConfigPushMon = xmlConfig.GetElementsByTagName("configPushMonitoring")[0];
@@ -77,9 +78,9 @@ namespace TRoschinsky.Lib.PushMonitoring
                                         break;
                                 }
                             }
-                            catch (Exception)
+                            catch (Exception exNode)
                             {
-                                // TODO: Implement error handling
+                                Log.Add(new JournalEntry(String.Format("Failed to process config node '{0}'.", node.Name), exNode));
                             }
                         }
                     }
@@ -87,8 +88,9 @@ namespace TRoschinsky.Lib.PushMonitoring
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Add(new JournalEntry("Failed to process config.", ex));
                 return false;
             }
         }
@@ -213,16 +215,16 @@ namespace TRoschinsky.Lib.PushMonitoring
                         }
 
                     }
-                    catch
+                    catch (Exception exNode)
                     {
-                        // A specific check wasn't interpreted well... so right now we'll just ignore and go on
+                        // A specific check wasn't interpreted well... log, ignore and just go on
+                        Log.Add(new JournalEntry(String.Format("Failed to process config check node '{0}'.", checkNode.Name), exNode));
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Implement exception handling
-                throw;
+                throw ex;
             }
         }
 
@@ -249,26 +251,29 @@ namespace TRoschinsky.Lib.PushMonitoring
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Implement exception handling
-                throw;
+                throw ex;
             }
         }
 
         private XmlDocument GetXmlDocument(XmlReader xmlReader)
         {
-            if (xmlReader != null)
+            try
             {
-                XmlDocument config = new XmlDocument();
-                config.Load(xmlReader);
-                xmlReader.Close();
-                return config;
+                if (xmlReader != null)
+                {
+                    XmlDocument config = new XmlDocument();
+                    config.Load(xmlReader);
+                    xmlReader.Close();
+                    return config;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return null;
+                Log.Add(new JournalEntry("Failed to load XML document.", ex));
             }
+            return null;
         }
 
     }

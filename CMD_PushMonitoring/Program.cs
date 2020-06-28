@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using TRoschinsky.Common;
 using TRoschinsky.Lib.PushMonitoring;
 
 namespace TRoschinsky.App.PushMonitoring
@@ -95,6 +97,13 @@ namespace TRoschinsky.App.PushMonitoring
                 else
                 {
                     Console.WriteLine(" ...there are no checks defined. Please examine configuration at <checksToRun>!");
+                }
+
+                Console.WriteLine();
+                Console.WriteLine(" Extended Log:");
+                foreach(JournalEntry entry in monitor.LogEntries)
+                {
+                    Console.WriteLine(entry);
                 }
             }
         }
