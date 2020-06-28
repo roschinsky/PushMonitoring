@@ -51,6 +51,7 @@
     <Compile Include="CheckTypes\CheckFileContent.cs" />
     <Compile Include="CheckTypes\CheckWinUptime.cs" />
     <Compile Include="CheckTypes\CheckWinService.cs" />
+    <Compile Include="JournalEntry.cs" />
     <Compile Include="Monitoring.cs" />
     <Compile Include="MonitoringConfig.cs" />
     <Compile Include="Notification.cs" />

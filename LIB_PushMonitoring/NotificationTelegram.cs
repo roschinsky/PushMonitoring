@@ -2,6 +2,8 @@
 using System.Collections.Specialized;
 using System.IO;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace TRoschinsky.Lib.PushMonitoring
@@ -56,6 +58,9 @@ namespace TRoschinsky.Lib.PushMonitoring
         {
             try
             {
+                ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
                 using (var client = new WebClient())
                 {
                     NameValueCollection payload = new NameValueCollection();
@@ -120,5 +125,23 @@ namespace TRoschinsky.Lib.PushMonitoring
 
             return result;
         }
+
+        #region Helper
+
+        /// <summary>
+        /// Certificate validation
+        /// </summary>
+        private bool ValidateCertificate(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors error)
+        {
+            // if certificate is invalid, log error and return false
+            if (error != SslPolicyErrors.None)
+            {
+                Log.Add(new Common.JournalEntry(String.Format("Certificate '{0}' policy error: '{1}'", cert.Subject, error), this.GetType().Name, true));
+                return false;
+            }
+            return true;
+        }
+
+        #endregion
     }
 }

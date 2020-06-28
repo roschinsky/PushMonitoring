@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
+using TRoschinsky.Common;
 
 namespace TRoschinsky.Lib.PushMonitoring
 {
@@ -16,6 +19,7 @@ namespace TRoschinsky.Lib.PushMonitoring
         protected string title;
         protected bool isImportant;
         protected bool isSilent;
+        public List<JournalEntry> Log = new List<JournalEntry>();
         public bool NotificationSuccessfulSend = false;
         public string NotificationWebResponse = String.Empty;
 
