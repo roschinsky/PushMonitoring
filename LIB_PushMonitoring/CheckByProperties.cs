@@ -56,6 +56,7 @@ namespace TRoschinsky.Lib.PushMonitoring
                         return (currentValue.StartsWith(expectedValue));
                     case Comparison.EndsWith:
                         return (currentValue.EndsWith(expectedValue));
+                    case Comparison.CompleteMatch:
                     default:
                         return (currentValue.Equals(expectedValue));
                 }

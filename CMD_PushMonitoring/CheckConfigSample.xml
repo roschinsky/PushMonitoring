@@ -26,6 +26,7 @@
     <CheckIcmp Host="192.168.0.1" />
     <CheckWinService ServiceName="DHCP-Client" />
     <CheckWinService ServiceName="ImNotExisting" />
+    <CheckHomematic Host="192.168.0.11" CCU2Device="BD853039:1" ExpectedValue="true" />
     -->
   </checksToRun>
 </configPushMonitoring>

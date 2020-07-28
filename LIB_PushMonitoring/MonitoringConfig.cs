@@ -208,6 +208,12 @@ namespace TRoschinsky.Lib.PushMonitoring
                                     string inputExpectedValue = checkNode.Attributes["ExpectedValue"].Value;
                                     checks.Add(new CheckFileContent(input, int.Parse(inputPeekFrom), int.Parse(inputPeekTo), inputCompareType, inputExpectedValue));
                                     break;
+                                case "CheckHomematic":
+                                    string host = checkNode.Attributes["Host"].Value;
+                                    input = checkNode.Attributes["CCU2Device"].Value;
+                                    string inputExpectedValue = checkNode.Attributes["ExpectedValue"].Value;
+                                    checks.Add(new CheckHomematic(input, inputExpectedValue));
+                                    break;
 
                                 default:
                                     break;
